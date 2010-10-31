@@ -15,33 +15,31 @@ http.createServer(function (req, res) {
                 "apiKey=YOUR API KEY HERE&" +
                 "format=json&" +
                 "longUrl=" + encodeURIComponent(path);
+  var simpleOutput = function(err, html){
+                       res.end(html);
+                       // sys.puts(err);
+                     };
 
   if ("" == path) {
     res.writeHead(200, {'Content-Type': 'text/html'});
     jade.renderFile('index.jade',
                     {},
-                    function(err, html){
-                      res.end(html);
-                      // sys.puts(err);
-                    });
-    } else if (path.match(/.*.[j,c]s+/)) {
-      file.serve(req, res);
-    } else if ("favicon.ico" != path) {
-      rest.get(api_url,
-             { data: {}
-             }).addListener('complete', function(data, bitly_response) {
-               if (200 == bitly_response.statusCode) {
-                 res.writeHead(200, {'Content-Type': 'text/html'});
-                 jade.renderFile('shortened.jade',
-                                 { locals: {url: data.data.url} },
-                                 function(err, html){
-                                   res.end(html);
-                                   // sys.puts(err);
-                                 });
-               }
-             }).addListener('error', function(err) {
-               sys.puts(err);
-             });
+                    simpleOutput);
+  } else if (path.match(/.*.[j,c]s+/)) {
+    file.serve(req, res);
+  } else if ("favicon.ico" != path) {
+    rest.get(api_url,
+           { data: {}
+           }).addListener('complete', function(data, bitly_response) {
+             if (200 == bitly_response.statusCode) {
+               res.writeHead(200, {'Content-Type': 'text/html'});
+               jade.renderFile('shortened.jade',
+                               { locals: {url: data.data.url} },
+                               simpleOutput);
+             }
+           }).addListener('error', function(err) {
+             sys.puts(err);
+           });
   }
 
 
