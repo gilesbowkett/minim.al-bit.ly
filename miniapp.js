@@ -1,17 +1,21 @@
 var http = require('http'),
     sys = require('sys'),
-    util = require('utils'),
+    nodeStatic = require('./node-static/lib/node-static'),
     rest = require('./restler/lib/restler'),
     jade = require('./jade');
 
 http.createServer(function (req, res) {
-  var url_to_shorten = req.url.replace(/\//, "");
+  var file = new nodeStatic.Server('./public', {
+    cache: false
+  });
+  var path = req.url.replace(/\//, "");
   var api_url = "http://api.bit.ly/v3/shorten?" +
                 "login=gilesgoatboy&" +
                 "apiKey=YOUR API KEY HERE&" +
                 "format=json&" +
-                "longUrl=http%3A%2F%2Fbetaworks.com%2F";
-  if ("favicon.ico" != url_to_shorten) {
+                "longUrl=" + encodeURIComponent(path);
+
+  if ("favicon.ico" != path && "style.css" != path) {
     rest.get(api_url,
              { data: {}
              }).addListener('complete', function(data, bitly_response) {
@@ -26,6 +30,10 @@ http.createServer(function (req, res) {
              }).addListener('error', function(err) {
                sys.puts(err);
              });
+  } else if ("style.css" == path) {
+    file.serve(req, res);
   }
+
+
 }).listen(3000, "127.0.0.1");
 

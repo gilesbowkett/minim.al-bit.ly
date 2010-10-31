@@ -1,0 +1,29 @@
+body {
+  background-color: white;
+  color: black;
+  font-size: 72px;
+  font-family: "Gill Sans", "Helvetica", sans-serif;
+
+  /* http://www.bluerobot.com/web/css/center1.html */
+  margin: 50px 0px;
+  padding: 0px;
+  text-align: center;
+}
+
+#shortened {
+  width: 500px;
+  margin: 0px auto;
+  text-align: left;
+}
+
+a {
+  padding: 10px;
+  color: black;
+  text-decoration: none;
+  border-radius: 20px;
+}
+
+a:hover {
+  background-color: black;
+  color: white;
+}
