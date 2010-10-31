@@ -17,7 +17,7 @@ http.createServer(function (req, res) {
                 "longUrl=" + encodeURIComponent(path);
   var simpleOutput = function(err, html){
                        res.end(html);
-                       // sys.puts(err);
+                       sys.puts(err);
                      };
 
   if ("" == path) {
@@ -25,7 +25,9 @@ http.createServer(function (req, res) {
     jade.renderFile('index.jade',
                     {},
                     simpleOutput);
-  } else if (path.match(/.*.[j,c]s+/)) {
+  } else if ("functionality.js" == path ||
+             "jquery.js" == path ||
+             "style.css" == path) {
     file.serve(req, res);
   } else if ("favicon.ico" != path) {
     rest.get(api_url,
@@ -43,5 +45,5 @@ http.createServer(function (req, res) {
   }
 
 
-}).listen(3000, "127.0.0.1");
+}).listen(3001, "67.23.3.57");
 
